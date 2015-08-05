@@ -19,8 +19,26 @@
     self.isDecimalPointSet=NO;
     self.orderOfTen=1;
     // Do any additional setup after loading the view, typically from a nib.
-}
+    for (UIButton* obj in self.buttonCollection) {
+        obj.layer.cornerRadius=20;
+        obj.layer.borderWidth=3;
+        obj.layer.borderColor=[UIColor colorWithRed:9.f/255.f green:84.f/255.f blue:223.f/255.f alpha:1.f].CGColor;
+    }
+    //self.view.backgroundColor=[UIColor colorWithRed:9.f/255.f green:84.f/255.f blue:223.f/255.f alpha:1.f];
+    self.labelResult.superview.layer.borderColor=[UIColor colorWithRed:9.f/255.f green:84.f/255.f blue:223.f/255.f alpha:1.f].CGColor;
+    self.labelResult.superview.layer.borderWidth=3;
+    self.labelResult.superview.layer.cornerRadius=20;
 
+
+    //[self.labelResult.superview.backgroundColor getRed:&red green:&green blue:&blue alpha:&alpha];
+    //NSLog(@"red %f green %f blue %f alpha %f",red,green,blue,alpha);
+    self.test.backgroundColor=self.labelResult.superview.backgroundColor;
+    
+}
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -37,14 +55,12 @@
         CGFloat currentValue=[self.labelResult.text floatValue];
         CGFloat valueAfter=currentValue+sender.tag/pow(10, self.orderOfTen);
         self.orderOfTen++;
-        self.labelResult.text=[NSString stringWithFormat:@"%f",valueAfter];
+        self.labelResult.text=[NSString stringWithFormat:@"%g",valueAfter];
     } else {
         CGFloat currentValue=[self.labelResult.text floatValue];
         CGFloat valueAfter=currentValue*10+sender.tag;
-        self.labelResult.text=[NSString stringWithFormat:@"%f",valueAfter];
+        self.labelResult.text=[NSString stringWithFormat:@"%g",valueAfter];
     }
-    
-        
     
 }
 
@@ -63,46 +79,47 @@
 
 - (IBAction)actionMathButton:(UIButton *)sender {
     self.isSignPressed=YES;
+    self.isMathSignPressed=YES;
     self.isDecimalPointSet=NO;
     mathOperation sign=[self defineMathSignFromButton:sender];
     
     if (sign == mathOperationPlusMinus) {
-        self.labelResult.text=[NSString stringWithFormat:@"%f",-[self.labelResult.text floatValue]];
+        self.labelResult.text=[NSString stringWithFormat:@"%g",-[self.labelResult.text floatValue]];
     } else {
         self.mathSign=sign;
     }
 }
 
 - (IBAction)actionEqualSign:(UIButton *)sender {
-        self.isSignPressed=YES;
+    if (self.isMathSignPressed) {
+        self.secondBufer=[self.labelResult.text doubleValue];
+        self.isMathSignPressed=NO;
+    }
     
-        double currentValue=[self.labelResult.text doubleValue];
         double result;
         switch (self.mathSign) {
             case mathOperationPlus:
-                result=self.bufer+currentValue;
+                result=self.bufer+self.secondBufer;
                 break;
             case mathOperationMinus:
-                result=self.bufer-currentValue;
+                result=self.bufer-self.secondBufer;
                 break;
             case mathOperationDivide:
-                result=self.bufer/currentValue;
+                result=self.bufer/self.secondBufer;
                 break;
             case mathOperationMultiple:
-                result=self.bufer*currentValue;
+                result=self.bufer*self.secondBufer;
                 break;
                 
             default:
                 ;
                 break;
         }
-    //
-    self.labelResult.text=[NSString stringWithFormat:@"%f",result];
-    //self.bufer=currentValue;
-    //self.mathSign=0;
+    self.labelResult.text=[NSString stringWithFormat:@"%*.*g",5,5,result];
+    self.bufer=result;
     self.orderOfTen=1;
     self.isDecimalPointSet=NO;
-    //self.isSignPressed=NO;
+    self.isSignPressed=YES;
 }
 
 -(mathOperation) defineMathSignFromButton:(UIButton*) button {

@@ -16,12 +16,16 @@ typedef NS_ENUM(NSInteger, mathOperation){
     mathOperationEqual
 };
 @interface ViewController : UIViewController
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *buttonCollection;
 @property (weak, nonatomic) IBOutlet UILabel *labelResult;
 @property (assign,nonatomic) mathOperation mathSign;
 @property (assign,nonatomic) NSInteger orderOfTen;
 @property (assign,nonatomic) BOOL isDecimalPointSet;
 @property (assign,nonatomic) CGFloat bufer;
-@property (assign,nonatomic) BOOL isSignPressed;
+@property (assign,nonatomic) BOOL isSignPressed;//+-*/=
+@property (assign,nonatomic) BOOL isMathSignPressed;//+-*/
+@property (assign,nonatomic) CGFloat secondBufer;
+
 
 - (IBAction)actionNumbers:(UIButton *)sender;
 - (IBAction)actionPointButton:(UIButton *)sender;
