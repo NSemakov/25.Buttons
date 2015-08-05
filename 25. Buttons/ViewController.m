@@ -32,7 +32,7 @@
 
     //[self.labelResult.superview.backgroundColor getRed:&red green:&green blue:&blue alpha:&alpha];
     //NSLog(@"red %f green %f blue %f alpha %f",red,green,blue,alpha);
-    self.test.backgroundColor=self.labelResult.superview.backgroundColor;
+    
     
 }
 - (void) viewWillAppear:(BOOL)animated {
